@@ -12,16 +12,16 @@ module Logik
   # Witch holds current states of each operation at runtime.
   # The global states storage is expected to be
   # visible to the evaluator.
-a = 12;;
   $GB_STATES = {}
   module Parser
-    lookup = ->( op_name ) {
-      op = op_name.to_sym
-      Hatab.each_pairs do |o_name, lmdExpr|
-        lmdExpr if o_name.eql? op
-      end
-    }
-
+    def self.lookup
+      ->( op_name ) {
+        op = op_name.to_sym
+        Hatab.each_pairs do |o_name, lmdExpr|
+          lmdExpr if o_name.eql? op
+        end
+      }
+    end
 
     def self.lexIt expr
       normalizer  = ->( u ) {
