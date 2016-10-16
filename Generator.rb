@@ -40,29 +40,70 @@ module Logik
       joiner.((0..Float::INFINITY)
                 .take(n)
                 .collect(&to_b))
+
     end
 
+    # Here is the implemention of a representation combinator.
+    # An instance of Node is an object which represent a cell
+    # Expressed with few symbol as an geometric and symetric cell.
+
+    # The trick here is that the '+' operator combine the
+    # Represention of it's left operand with it's own
+    # Represention to build a new Node.
+
+    # Therefore the set of all instances of Node
+    # Generate a structure of monoid with the '+' operator.
+
+    # Such structure makes utterly useless ridiculous boiler-plate
+    # code for processing representions. Instead we gain a hight level
+    # of abstraction for combining both: from the left and the bottom
+    # of a Node object. That kind of abstraction is highly analogous
+    # Haskell's applicative functors witch is structure preserving mappings.
+
     class Node
-      attr_accessor :head, :mid, :md, :s
-      def initialize n=0
-        @head = " _____\n"
-        @mid  = "|  %s  |\n"
-        @md   = "      |"
-        @value = n
-        @s = [@head , (@mid * 2 %[' ', @value]) , "|" , @head.strip + "|"]
+      attr_accessor :content
+      def initialize value=0
+        @content = [[" ", "_", "_", "_", "_", " "],
+                    ["|", " ", " ", " ", " ", "|"],
+                    ["|", " ", " ", "#{value}", " ", "|"],
+                    ["|", "_", "_", "_", "_", "|"]]
+        @idx   = 2,3
+        @value = value
       end
 
       def to_s
-        @s.inject(:+)
+        @content
+          .map { |c| c.inject(:+) }
+          .join("\n")
       end
 
       def +(other)
-        s = other.s
+        content = other.content.dup
+        content[0][0] = "_"
+        content[1][0] = " "
+        content[2][0] = " "
+        content[3][0] = "_"
         n = Node.new
-        n.s = @s.zip(s)
-              .map { |item, aitem| item + aitem }
+        n.content = @content
+                    .zip(content)
+                    .map { |i, o| i + o }
         n
       end
+      def *(other)
+        content = other.content.dup
+        size = content[0].size - 1
+        u = [0, 5] + (6..size).step(5).to_a
+        u.each { |i| content[0][i] = "|"}
+        ((0..size).to_a - u).each { |i| content[0][i] = " " }
+        n = Node.new
+        content.shift
+        n.content = @content + content
+        n
+      end
+    end
+
+    def self.j(*arg)
+      arg.map { |z| Node.new z }.inject(:+)
     end
   end
 end

@@ -14,9 +14,9 @@ module Logik
     end
 
     def self.runExpr expr
-      expr = Logik::Parser::parse( expr )
+      expr = ::Parser::parse( expr )
       $GB_STATES = _load_with_tables expr
-      evL2 expr
+      tables evL2( expr )
     end
 
     def self.evL expr
@@ -43,7 +43,7 @@ module Logik
           print "Herbrand > "
           s = gets.chomp
           break if ["q", "quit"].include? s
-          puts runExpr(s).inspect
+          runExpr(s)
         rescue
             puts "Invalid Expression"
         end
@@ -67,6 +67,12 @@ module Logik
              .flatten
              .select { |item| item.size == 1}.uniq
       vars.zip(Logik::Generator::optmzedGrtor vars.size).to_h
+    end
+
+    def self.tables result
+      result.map! { |g| g ? 1 : 0 }
+      v, *rst = $GB_STATES.values + [result]
+      puts v.zip(*rst).map { |u| Generator::j(*u) }.inject(:*)
     end
   end
 end
