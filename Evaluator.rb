@@ -14,7 +14,7 @@ module Logik
     end
 
     def self.runExpr expr
-      expr = ::Parser::parse( expr )
+      expr = Logik::Parser::parse( expr )
       $GB_STATES = _load_with_tables expr
       tables evL2( expr )
     end
