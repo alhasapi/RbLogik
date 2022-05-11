@@ -37,6 +37,7 @@ module Logik
         evAtomiq expr[0]
       end
     end
+
     def self.repl
       loop do
         begin
@@ -44,12 +45,14 @@ module Logik
           s = gets.chomp
           break if ["q", "quit"].include? s
           runExpr(s)
-        rescue
+        rescue => e
+            puts e.class, e.message
             puts "Invalid Expression"
         end
       end
       "Good bye :-)."
     end
+
     def self.evL2 e
       func = -> expr {
         if expr[0].isOp
