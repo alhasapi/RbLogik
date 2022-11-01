@@ -44,21 +44,16 @@ module Logik
     end
 
     # Here is the implemention of a representation combinator.
-    # An instance of Node is an object which represent a cell
+    # An instance of Node is an object which represents a cell
     # Expressed with few symbol as an geometric and symetric cell.
 
     # The trick here is that the '+' operator combine the
     # Represention of it's left operand with it's own
     # Represention to build a new Node.
 
-    # Therefore the set of all instances of Node
-    # Generate a structure of monoid with the '+' operator.
-
-    # Such structure makes utterly useless ridiculous boiler-plate
-    # code for processing representions. Instead we gain a hight level
-    # of abstraction for combining both: from the left and the bottom
-    # of a Node object. That kind of abstraction is highly analogous
-    # Haskell's applicative functors witch is structure preserving mappings.
+    # Therefore the set of all instances of Node generates a bi-monoidal structure 
+    # with '+' and '*' operators. Perceiving/Imposing algebraic structures to software 
+    # leads to deep clarity of understanding and beautifull code.
 
     class Node
       attr_accessor :content
